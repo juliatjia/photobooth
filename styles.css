@@ -164,35 +164,38 @@ input:checked + .slider::before {
   border-radius: 10px;
 }
 
-.printed-strip-wrapper {
-  position: relative;
-  margin-top: 40px;
-  height: 600px;
-  display: none;
-  align-items: center;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
 .printed-strip-wrapper.show {
-  display: block;
+  display: flex;
   opacity: 1;
 }
 
 .printed-strip {
-  position: relative;
+  position: absolute;
+  top: 0; /* this is now the tray top */
+  left: 50%;
+  transform: translate(-50%, -150%) rotate(var(--angle, 0deg));
   width: 200px;
   background: #fdfdfd;
-  margin: 0 auto;
   padding: 10px;
   border: 4px solid #ccc;
   border-radius: 4px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  /* transform: translateY(-100%); */
-  transform: translateY(-150%) rotate(var(--angle, 0deg)); 
-  animation: drop-strip 2s ease-out forwards;
-  z-index: 3;
+  animation: drop-strip 1.2s ease-out forwards;
+  transition: transform 0.3s ease;
   cursor: pointer;
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  background: #fdfdfd;
+  padding: 10px;
+  border: 4px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  transform: translateY(-150%) rotate(var(--angle, 0deg));
+  animation: drop-strip 1.2s ease-out forwards;
+  transition: transform 0.3s ease;
+  cursor: pointer; */
 }
 
 @keyframes drop-strip {
@@ -200,12 +203,6 @@ input:checked + .slider::before {
     transform: translateY(0) rotate(var(--angle, 0deg)); /* Drop into place with tilt */
   }
 }
-
-/* @keyframes drop-strip {
-  to {
-    transform: translateY(0);
-  }
-} */
 
 .strip-photos img {
   width: 100%;
@@ -280,36 +277,23 @@ input:checked + .slider::before {
 
 /* The photobooth tray slot */
 .tray-slot {
-  width: 220px;
+  /* width: 220px;
   height: 20px;
   background: #c1a998;
   border-radius: 8px;
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
   margin-bottom: -10px;
-  z-index: 2;
-}
-
-/* Printed strip container */
-.printed-strip-wrapper {
-  height: 600px;
-  display: none;
-  justify-content: center;
-  align-items: flex-start;
-  overflow: hidden;
-  width: 100%;
-}
-
-/* The strip itself */
-.printed-strip {
-  width: 200px;
-  background: #fdfdfd;
-  padding: 10px;
-  border: 4px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  transform: translateY(-100%);
-  animation: drop-strip 2s ease-out forwards;
-  /* z-index: 1; */
+  z-index: 10000; */
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 20px;
+  background: #c1a998;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 10000;
 }
 
 @keyframes drop-strip {
@@ -351,40 +335,27 @@ input:checked + .slider::before {
   transform: translateY(0) scale(1.03);
 }
 
-.printed-strip {
-  position: relative;
-  width: 200px;
-  background: #fdfdfd;
-  padding: 10px;
-  border: 4px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  /* transform: translateY(-100%); */
-  transition: transform 0.3s ease;
-  animation: drop-strip 1.2s ease-out forwards;
-  cursor: pointer;
-}
-
 .printed-strip-wrapper {
   position: relative;
-  height: 600px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-top: 20px;
+  margin: 40px auto; 
+  display: block;
   flex-direction: column;
+  align-items: center;
   gap: 20px;
+  width: 220px;
+  height: 600px; /* Allow the container to grow */
+  overflow: visible; /* Prevent clipping of falling strips */
+  transition: opacity 0.5s ease;
+  opacity: 1;
 }
 
 .printed-strip:nth-child(n) {
   margin-top: -40px;
-  transform: translateY(-120%) rotate(var(--angle, 0deg));
+  /* transform: translateY(-120%) rotate(var(--angle, 0deg)); */
 }
 
-
 .download-button {
-  background-color: #efefef;
+  background-color: #FBC4BF;
   border: 1px solid #ccc;
   padding: 6px 12px;
   margin-top: 8px;
@@ -395,5 +366,16 @@ input:checked + .slider::before {
 }
 
 .download-button:hover {
-  background-color: #ddd;
+  background-color: #f4aba3;
+}
+
+.tray-slot::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: #f6f5e1;
+  z-index: 10001;
 }

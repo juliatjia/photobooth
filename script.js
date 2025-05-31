@@ -99,10 +99,11 @@ async function startPhotoSession() {
     stripContainer.style.setProperty('--angle', `${rotation}deg`);
     stripContainer.style.zIndex = 10 + document.querySelectorAll('.printed-strip').length;
 
-    // stripContainer.style.zIndex = 10 + numStrips;
+    const offsetX = (Math.random() * 10 - 5).toFixed(0); // -5 to +5 px
+    const offsetY = (Math.random() * 10).toFixed(0);     // 0 to +10 px
+    stripContainer.style.left = `${offsetX}px`;
+    stripContainer.style.top = `${offsetY}px`;
 
-    // const angle = (Math.random() * 4 - 2).toFixed(2);
-    // stripContainer.style.setProperty('--angle', `${angle}deg`);
 
     // Photos
     const stripPhotos = document.createElement('div');
@@ -114,10 +115,15 @@ async function startPhotoSession() {
     });
 
     // Caption (editable)
-    const caption = document.createElement('p');
-    caption.classList.add('caption');
-    caption.contentEditable = true;
-    caption.textContent = document.getElementById("caption-input").value || "Your Caption Here";
+    const captionText = document.getElementById("caption-input").value.trim();
+    let caption = null;
+
+    if (captionText !== "") {
+      caption = document.createElement('p');
+      caption.classList.add('caption');
+      caption.contentEditable = true;
+      caption.textContent = captionText;
+}
 
     // Download Button (per strip)
     const downloadBtn = document.createElement('button');
@@ -132,7 +138,14 @@ async function startPhotoSession() {
         scale: 2
       }).then(canvas => {
         const link = document.createElement('a');
-        link.download = 'photo_strip_with_caption.png';
+        // link.download = 'photo_strip_with_caption.png';
+
+        // Get caption and sanitize it for use as filename
+        // const rawCaption = caption.textContent.trim();
+        const rawCaption = caption ? caption.textContent.trim() : '';
+        const safeCaption = rawCaption.replace(/[^a-z0-9_\-]/gi, '_') || 'photo_strip';
+        link.download = `${safeCaption}.png`;
+
         link.href = canvas.toDataURL('image/png');
         link.click();
       });
@@ -140,7 +153,7 @@ async function startPhotoSession() {
 
     // Combine
     stripContainer.appendChild(stripPhotos);
-    stripContainer.appendChild(caption);
+    if (caption) stripContainer.appendChild(caption);
     stripContainer.appendChild(downloadBtn);
 
     // Add click behavior for bring-to-front
@@ -186,9 +199,9 @@ async function startPhotoSession() {
 
 
 // Update caption live after session
-document.getElementById('caption-input').addEventListener('input', (e) => {
-  document.getElementById('strip-caption').innerText = e.target.value || "Your Caption Here";
-});
+// document.getElementById('caption-input').addEventListener('input', (e) => {
+// document.getElementById('strip-caption').innerText = e.target.value || "Your Caption Here";
+// });
 
 // Update card message live after session
 document.getElementById('message-input').addEventListener('input', (e) => {
@@ -226,7 +239,7 @@ video.classList.add('video-digital');
 
 
 startButton.addEventListener('click', startPhotoSession);
-downloadButton.addEventListener('click', downloadStrip);
+// downloadButton.addEventListener('click', downloadStrip);
 
 // const stripEl = document.getElementById('printed-strip');
 const cardEl = document.getElementById('message-card');
@@ -250,4 +263,3 @@ cardEl.addEventListener('click', () => {
   stripEl.classList.remove('bring-to-front');
   addAnimation(cardEl, 'tilt');
 });
-
