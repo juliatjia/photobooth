@@ -1,0 +1,399 @@
+body {
+  background: #F6F5E1;
+  font-family: 'EB Garamond', Courier, monospace;
+  text-align: center;
+  padding: 20px;
+}
+
+.photobooth {
+  position: relative;
+  display: inline-block;
+}
+
+.hidden {
+  display: none;
+}
+
+.viewfinder {
+  position: relative;
+  display: inline-block;
+}
+
+video.player {
+  width: 640px;
+  height: 480px;
+  border: 10px solid #c1a998;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  /* filter: sepia(0.5) contrast(1.2) brightness(1.1); */
+  transform: scaleX(-1); /* mirror camera */
+}
+
+.video-digital {
+  filter: contrast(1) saturate(1.05) brightness(1.05);
+}
+
+.video-bw {
+  filter: grayscale(1) contrast(1.2);
+}
+
+/* Countdown overlay */
+.countdown {
+  position: absolute;
+  font-size: 100px;
+  color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Flash overlay */
+.flash {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Controls */
+.controls {
+  margin-top: 10px;
+}
+
+button {
+  background-color: #FBC4BF;
+  color: #000000;
+  border: none;
+  padding: 12px 24px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 12px;
+  font-family: 'EB Garamond', cursive, sans-serif;
+  font-size: 16px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 0 #3a2b55;
+}
+
+button:hover {
+  background-color: #dca099;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Strip display */
+.strip {
+  margin-top: 20px;
+}
+
+.strip img {
+  margin: 10px;
+  border: 8px solid #fff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  height: 200px;
+}
+
+/* Canvas for strip */
+canvas.strip-canvas {
+  display: none;
+}
+
+/* Toggle Switch */
+.switch-label {
+  display: inline-block;
+  position: relative;
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+  margin-left: 10px;
+  user-select: none;
+}
+
+.switch-label input {
+  display: none;
+}
+
+.slider {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 34px;
+  margin-left: 8px;
+  vertical-align: middle;
+  transition: background-color 0.3s ease;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 2px;
+  top: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+input:checked + .slider {
+  background-color: #ef8aa5;
+}
+
+input:checked + .slider::before {
+  transform: translateX(26px);
+}
+
+.customizations {
+  margin-top: 20px;
+}
+
+.customizations input,
+.customizations textarea {
+  width: 80%;
+  max-width: 400px;
+  padding: 10px;
+  font-family: 'EB Garamond', serif;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.printed-strip-wrapper {
+  position: relative;
+  margin-top: 40px;
+  height: 600px;
+  display: none;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.printed-strip-wrapper.show {
+  display: block;
+  opacity: 1;
+}
+
+.printed-strip {
+  position: relative;
+  width: 200px;
+  background: #fdfdfd;
+  margin: 0 auto;
+  padding: 10px;
+  border: 4px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  /* transform: translateY(-100%); */
+  transform: translateY(-150%) rotate(var(--angle, 0deg)); 
+  animation: drop-strip 2s ease-out forwards;
+  z-index: 3;
+  cursor: pointer;
+}
+
+@keyframes drop-strip {
+  to {
+    transform: translateY(0) rotate(var(--angle, 0deg)); /* Drop into place with tilt */
+  }
+}
+
+/* @keyframes drop-strip {
+  to {
+    transform: translateY(0);
+  }
+} */
+
+.strip-photos img {
+  width: 100%;
+  margin-bottom: 10px;
+  border: 2px solid white;
+}
+
+#strip-caption, #card-text {
+  transition: color 0.3s ease;
+}
+
+
+.caption {
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.message-card {
+  position: absolute;
+  top: 120px;
+  left: 180px;
+  background: #f3e5cb;
+  padding: 20px;
+  width: 240px;
+  transform: rotate(-4deg);
+  border: 1px solid #d4c4a8;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  z-index: 2;
+  cursor: pointer;
+}
+
+.printed-strip.bring-to-front {
+  z-index: 3;
+}
+
+.message-card.bring-to-front {
+  z-index: 3;
+}
+
+
+.card-text {
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  white-space: pre-line;
+  text-align: left;
+}
+
+.flash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(white, rgba(255,255,255,0.5));
+  opacity: 0;
+  border-radius: 10px;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 5;
+}
+
+/* Container to center tray and strip */
+.photo-output-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin-top: 40px;
+}
+
+/* The photobooth tray slot */
+.tray-slot {
+  width: 220px;
+  height: 20px;
+  background: #c1a998;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+  margin-bottom: -10px;
+  z-index: 2;
+}
+
+/* Printed strip container */
+.printed-strip-wrapper {
+  height: 600px;
+  display: none;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* The strip itself */
+.printed-strip {
+  width: 200px;
+  background: #fdfdfd;
+  padding: 10px;
+  border: 4px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  transform: translateY(-100%);
+  animation: drop-strip 2s ease-out forwards;
+  /* z-index: 1; */
+}
+
+@keyframes drop-strip {
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Bounce/Tilt animation */
+@keyframes bounceForward {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.05) rotate(1deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes bounceBack {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(0.98) rotate(-1deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.bounce {
+  animation: bounceForward 0.4s ease;
+}
+
+.tilt {
+  animation: bounceBack 0.4s ease;
+}
+
+.message-card {
+  transition: transform 0.3s ease;
+}
+
+.message-card[style*="z-index: 3"] {
+  transform: rotate(-4deg) translateX(-10px) scale(1.03);
+}
+
+.printed-strip[style*="z-index: 3"] {
+  transform: translateY(0) scale(1.03);
+}
+
+.printed-strip {
+  position: relative;
+  width: 200px;
+  background: #fdfdfd;
+  padding: 10px;
+  border: 4px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  /* transform: translateY(-100%); */
+  transition: transform 0.3s ease;
+  animation: drop-strip 1.2s ease-out forwards;
+  cursor: pointer;
+}
+
+.printed-strip-wrapper {
+  position: relative;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.printed-strip:nth-child(n) {
+  margin-top: -40px;
+  transform: translateY(-120%) rotate(var(--angle, 0deg));
+}
+
+
+.download-button {
+  background-color: #efefef;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  margin-top: 8px;
+  border-radius: 8px;
+  font-family: 'EB Garamond', serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.download-button:hover {
+  background-color: #ddd;
+}

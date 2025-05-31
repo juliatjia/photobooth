@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Vintage Photobooth</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Darumadrop+One&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header>
+        <h1>Welcome to Julia's Vintage Photobooth!!</h1>
+        <p>Take some pics and capture memories with your friends <3</p>
+
+        <div class="photobooth"> 
+            <!-- <div class="screen-flash" id="screen-flash"></div> -->
+        </div>
+        <div class="viewfinder">
+            <video class="player" autoplay muted></video>
+            <div class="countdown"></div>
+            <div class="flash"></div>
+        </div>
+
+    <div class="controls">
+        <button class="start-session">📸 Start Photobooth</button>
+        <label class="switch-label">
+            B/W
+            <input type="checkbox" id="filter-switch">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="customizations">
+        <h2>Add a Caption & Message</h2>
+        <input id="caption-input" type="text" placeholder="Write your photo strip caption..." />
+        <textarea id="message-input" rows="3" placeholder="Write a personal message card..."></textarea>
+    </div>
+
+    <div class="photo-output-area">
+        <div class="tray-slot hidden" id="tray-slot"></div>
+        <!-- <div class="printed-strip-wrapper">
+            <div class="printed-strip" id="printed-strip">
+            <div class="strip-photos" id="strip-photos"></div>
+            <p class="caption" id="strip-caption"></p>
+            </div>
+        </div> -->
+        <div class="printed-strip-wrapper" id="printed-strip-wrapper">
+            <!-- individual strips will be inserted here dynamically -->
+        </div>
+        <div class="message-card hidden" id="message-card">
+            <p id="card-text" class="card-text"></p>
+        </div>
+    </div>
+
+
+    <div class="controls download-controls hidden" id="download-controls">
+        <!-- <button class="download-strip">💾 Download Strip</button> -->
+    </div>
+    <canvas class="strip-canvas"></canvas>
+    <div class="strip"></div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
+
