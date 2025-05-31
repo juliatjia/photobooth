@@ -8,6 +8,15 @@ const downloadButton = document.querySelector('.download-strip');
 const ctxStrip = canvasStrip.getContext('2d');
 const filterSwitch = document.getElementById('filter-switch');
 
+const captionInput = document.getElementById("caption-input");
+
+captionInput.addEventListener('input', (e) => {
+  if (window.latestCaption) {
+    window.latestCaption.textContent = e.target.value || "Your Caption Here";
+  }
+});
+
+
 let photoData = [];
 
 // Access the webcam
@@ -99,10 +108,14 @@ async function startPhotoSession() {
     stripContainer.style.setProperty('--angle', `${rotation}deg`);
     stripContainer.style.zIndex = 10 + document.querySelectorAll('.printed-strip').length;
 
-    const offsetX = (Math.random() * 10 - 5).toFixed(0); // -5 to +5 px
+    // const offsetX = (Math.random() * 10 - 5).toFixed(0); // -5 to +5 px
     const offsetY = (Math.random() * 10).toFixed(0);     // 0 to +10 px
-    stripContainer.style.left = `${offsetX}px`;
+    // stripContainer.style.left = `${offsetX}px`;
     stripContainer.style.top = `${offsetY}px`;
+
+    stripContainer.style.left = '50%'; // center
+    stripContainer.style.transform = 'translateX(-50%) rotate(' + rotation + 'deg)';
+
 
 
     // Photos
@@ -123,7 +136,7 @@ async function startPhotoSession() {
       caption.classList.add('caption');
       caption.contentEditable = true;
       caption.textContent = captionText;
-}
+    }
 
     // Download Button (per strip)
     const downloadBtn = document.createElement('button');
@@ -153,19 +166,29 @@ async function startPhotoSession() {
 
     // Combine
     stripContainer.appendChild(stripPhotos);
-    if (caption) stripContainer.appendChild(caption);
+    if (caption) {
+      stripContainer.appendChild(caption);
+      window.latestCaption = caption;  // <-- ✅ Add this line
+    }
     stripContainer.appendChild(downloadBtn);
 
     // Add click behavior for bring-to-front
+    // stripContainer.addEventListener('click', () => {
+    //   stripContainer.style.zIndex = 3;
+    //   document.getElementById("message-card").style.zIndex = 2;
+    //   addAnimation(stripContainer, 'bounce');
+    // });
+
     stripContainer.addEventListener('click', () => {
-      stripContainer.style.zIndex = 3;
-      document.getElementById("message-card").style.zIndex = 2;
-      addAnimation(stripContainer, 'bounce');
+      if (topElement !== "strip") bringToFront("strip");
     });
 
     // Add to wrapper
     // const wrapper = document.getElementById('printed-strip-wrapper');
-    wrapper.appendChild(stripContainer);
+    // wrapper.appendChild(stripContainer);
+    const trayContainer = document.querySelector('.tray-container');
+    trayContainer.appendChild(stripContainer);  
+
     wrapper.classList.add('show');
 
     // Reveal card
@@ -176,11 +199,15 @@ async function startPhotoSession() {
     messageCard.style.zIndex = 2;
 
     // Add click behavior for bring-to-front on card
-    messageCard.onclick = () => {
-      messageCard.style.zIndex = 3;
-      stripContainer.style.zIndex = 2;
-      addAnimation(messageCard, 'tilt');
-    };
+    // messageCard.onclick = () => {
+    //   messageCard.style.zIndex = 3;
+    //   stripContainer.style.zIndex = 2;
+    //   addAnimation(messageCard, 'tilt');
+    // };
+    
+      messageCard.onclick = () => {
+        if (topElement !== "card") bringToFront("card");
+      };
 
     // Tray and download visibility
     document.getElementById('tray-slot').classList.remove('hidden');
@@ -195,13 +222,16 @@ async function startPhotoSession() {
 
     // Track latest strip
     window.latestStrip = stripContainer;
+
 }
 
 
-// Update caption live after session
-// document.getElementById('caption-input').addEventListener('input', (e) => {
-// document.getElementById('strip-caption').innerText = e.target.value || "Your Caption Here";
-// });
+document.getElementById('caption-input').addEventListener('input', (e) => {
+  if (window.latestCaption) {
+    window.latestCaption.textContent = e.target.value || "Your Caption Here";
+  }
+});
+
 
 // Update card message live after session
 document.getElementById('message-input').addEventListener('input', (e) => {
@@ -263,3 +293,30 @@ cardEl.addEventListener('click', () => {
   stripEl.classList.remove('bring-to-front');
   addAnimation(cardEl, 'tilt');
 });
+
+// Track which one is on top
+let topElement = "strip";
+
+// Toggle strip/card z-index
+function bringToFront(target) {
+  const strip = window.latestStrip;
+  const card = document.getElementById('message-card');
+
+  strip.classList.remove('bring-to-front');
+  card.classList.remove('bring-to-front');
+
+  if (target === "strip") {
+    strip.classList.add('bring-to-front');
+    strip.style.zIndex = 3;
+    card.style.zIndex = 2;
+    addAnimation(strip, 'bounce');
+    topElement = "strip";
+  } else {
+    card.classList.add('bring-to-front');
+    card.style.zIndex = 3;
+    strip.style.zIndex = 2;
+    addAnimation(card, 'tilt');
+    topElement = "card";
+  }
+}
+

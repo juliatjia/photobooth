@@ -38,21 +38,35 @@
         <textarea id="message-input" rows="3" placeholder="Write a personal message card..."></textarea>
     </div>
 
-    <div class="photo-output-area">
+    <!-- <div class="photo-output-area">
         <div class="tray-slot hidden" id="tray-slot"></div>
-        <!-- <div class="printed-strip-wrapper">
-            <div class="printed-strip" id="printed-strip">
-            <div class="strip-photos" id="strip-photos"></div>
-            <p class="caption" id="strip-caption"></p>
-            </div>
-        </div> -->
         <div class="printed-strip-wrapper" id="printed-strip-wrapper">
-            <!-- individual strips will be inserted here dynamically -->
-        </div>
+            individual strips will be inserted here dynamically -->
+        <!-- </div>
         <div class="message-card hidden" id="message-card">
             <p id="card-text" class="card-text"></p>
         </div>
+    </div> -->
+
+    <div class="photo-output-area">
+        <div class="tray-container">
+            <div class="tray-slot" id="tray-slot"></div>
+            <!-- The printed strip will be inserted here dynamically -->
+
+            <div class="message-card hidden" id="message-card">
+                <p id="card-text" class="card-text"></p>
+            </div>
+        </div>
+
+        <div class="printed-strip-wrapper" id="printed-strip-wrapper">
+            <!-- Optional: for already printed or stacked strips -->
     </div>
+
+  <!-- <div class="message-card hidden" id="message-card">
+    <p id="card-text" class="card-text"></p>
+  </div> -->
+</div>
+
 
 
     <div class="controls download-controls hidden" id="download-controls">
