@@ -129,14 +129,22 @@ async function startPhotoSession() {
 
     // Caption (editable)
     const captionText = document.getElementById("caption-input").value.trim();
-    let caption = null;
+    const caption = document.createElement('p');
+    caption.classList.add('caption');
+    caption.contentEditable = true;
+    caption.textContent = captionText || "";
+    stripContainer.appendChild(caption);
+    window.latestCaption = caption; 
 
-    if (captionText !== "") {
-      caption = document.createElement('p');
-      caption.classList.add('caption');
-      caption.contentEditable = true;
-      caption.textContent = captionText;
-    }
+    // const captionText = document.getElementById("caption-input").value.trim();
+    // let caption = null;
+
+    // if (captionText !== "") {
+    //   caption = document.createElement('p');
+    //   caption.classList.add('caption');
+    //   caption.contentEditable = true;
+    //   caption.textContent = captionText;
+    // }
 
     // Download Button (per strip)
     const downloadBtn = document.createElement('button');
@@ -228,7 +236,7 @@ async function startPhotoSession() {
 
 document.getElementById('caption-input').addEventListener('input', (e) => {
   if (window.latestCaption) {
-    window.latestCaption.textContent = e.target.value || "Your Caption Here";
+    window.latestCaption.textContent = e.target.value || "";
   }
 });
 
